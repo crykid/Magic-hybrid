@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+    <title>this is title</title>
+    <script type="text/javascript">
+			// alert/prompt/confirm
+
+
+			function onAlertMsg () {
+
+				var params = prompt("magic_webAlert","1234567");
+				alert(params);
+
+			}
+			function interceptAlert () {
+				var params = prompt("magic_intercept","2345");
+				alert(params);
+
+			}
+
+			
+			// web 2 Native，单向
+			function WebToNative () {
+				<!--window.webkit.messageHandlers.jsoc1.postMessage('jsToOc');-->
+				var aa=  MAGIC_HYBRID_BRIDGE.nativeExecute("{\n" +
+                "\t\"OPERATION_TYPE\":\"MEDIA_CAMERA\",\n" +
+                "\t\"params\":{\n" +
+                "\t\t\"imageName\":\"兰博基尼.jpg\"\n" +
+                "\t}\n" +
+                "}");
+			}
+
+			//双向交互
+			function magicHybrid () {
+				<!--//window.webkit.messageHandlers.jsoc2.postMessage(['13300001111', 'Go Climbing This Weekend !!!']);-->
+                <!--window.webkit.messageHandlers.jsoc2.postMessage({"key":"valuue"});-->
+
+              var aa=  MAGIC_HYBRID_BRIDGE.nativeExecute("{\n" +
+                "\t\"OPERATION_TYPE\":\"MEDIA_ALBUM\",\n" +
+                "\t\"params\":{\n" +
+                "\t\t\"num\":\"8\"\n" +
+                "\t}\n" +
+                "}");
+            	<!--alert(aa);-->
+            }
+
+			//native调用的方法
+			function webExecute(msg){
+			    alert("web alert:"+msg);
+			}
+
+
+
+
+
+    </script>
+    <style type="text/css">
+			button {
+				border: 0;
+				height: 30px;
+				width: 100%;
+				background-color: orangered;
+				color: white;
+				display: block;
+				margin-top: 5px;
+				border-radius: 4px;
+				font-size: 12px;
+			}
+			a {
+				border: 0;
+				height: 30px;
+				width: 100%;
+				background-color: rosybrown;
+				color: white;
+				display: inline-block;
+				margin-top: 5px;
+				border-radius: 4px;
+				text-align: center;
+				line-height: 30px;
+                font-size: 12px;
+			}
+
+
+
+    </style>
+</head>
+
+<body style="background-color: lightblue;">
+<button onclick="onAlertMsg();">Web Alert并输入参数</button>
+<button onclick="interceptAlert();">拦截Web Alert并打开原生alert</button>
+<button onclick="WebToNative();">Wet 2 Native :单向</button>
+<button onclick="magicHybrid();">双向交互：打开相册返回图片</button>
+<a href="http://www.google.com">拦截一个连接：google</a>
+</body>
+
+</html>
