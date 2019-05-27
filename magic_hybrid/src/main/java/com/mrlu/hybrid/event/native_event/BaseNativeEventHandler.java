@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.mrlu.hybrid.activityresult.ActivityResultHandlerManager;
+import com.mrlu.hybrid.activityresult.IActivityResultHandler;
 import com.mrlu.hybrid.event.web_event.WebEvent;
 import com.mrlu.hybrid.event.web_event.WebEventHandler;
 import com.mrlu.hybrid.permission.PermissionsManager;
@@ -29,7 +31,7 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
  * <p>2.在1中多次提到“职责”，很明显，不同的事件--多个功能专一处理者，“责任链模式”就很符合这种情况。我们采用链式结构
  * 将多个处理者依次存储，使用的时候逐个比对落实责任。</p>
  */
-public abstract class BaseNativeEventHandler implements IEventHandler, EasyPermissions.PermissionCallbacks {
+public abstract class BaseNativeEventHandler implements IEventHandler, EasyPermissions.PermissionCallbacks, IActivityResultHandler {
     /**
      * jsMsg 格式
      * {
@@ -186,9 +188,22 @@ public abstract class BaseNativeEventHandler implements IEventHandler, EasyPermi
 
     }
 
+    @Override
+    public void handleActivityResult(Intent intent) {
+
+    }
+
+    /**
+     * 切记：如果想要使用onActivityResult则建议使用一下方式启动activity
+     *
+     * @param intent
+     * @param requestCode
+     */
     protected void startActivityForResult(Intent intent, int requestCode) {
         if (activity != null) {
             activity.startActivityForResult(intent, requestCode);
+//            ActivityResultHandlerManager.getInstance().addHandler(this);
+            ActivityResultHandlerManager.getInstance().add(requestCode, this);
         }
     }
 }

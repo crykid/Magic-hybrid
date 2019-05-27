@@ -28,7 +28,7 @@ public interface IActivityResultHandler {
      *
      * @return int：requestCode
      */
-    int getRequestCode();
+//    int getRequestCode();
 
     /**
      * 代理执行本该在所依赖的activity的onActivityResult执行的事件；

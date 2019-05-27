@@ -12,8 +12,6 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.mrlu.hybrid.activityresult.ActivityResultHandlerManager;
-import com.mrlu.hybrid.activityresult.IActivityResultHandler;
 import com.mrlu.hybrid.event.native_event.BaseNativeEventHandler;
 import com.mrlu.hybrid.event.web_event.WebEvent;
 import com.mrlu.hybrid.proxy.BaseWebViewFragment;
@@ -29,19 +27,12 @@ import org.json.JSONObject;
  * Created at : 2019-05-22 at 17:21
  * Description: web调用原生相机
  */
-public class MediaAlbumHandler extends BaseNativeEventHandler implements IActivityResultHandler {
+public class MediaAlbumHandler extends BaseNativeEventHandler {
 
     private final String IMAGE_TYPE = "image/*";
-    private final String [] album_permission = {Manifest.permission.READ_EXTERNAL_STORAGE};
 
     public MediaAlbumHandler() {
-        /*
-        IActivityResultHandler使用方法：
-        1.实现接口IActivityResultHandler;
-        2.在实现类调用  ActivityResultHandlerManager.getInstance().addHandler(this);
-        3.在依赖的activity的onActivityResult方法中使用ActivityResultHandlerManager.getInstance().handleResult()
-         */
-        ActivityResultHandlerManager.getInstance().addHandler(this);
+
     }
 
     @NonNull
@@ -94,10 +85,7 @@ public class MediaAlbumHandler extends BaseNativeEventHandler implements IActivi
         startActivityForResult(intent,5371);
     }
 
-    @Override
-    public int getRequestCode() {
-        return 5371;
-    }
+
 
     @Override
     public void handleActivityResult(Intent intent) {
