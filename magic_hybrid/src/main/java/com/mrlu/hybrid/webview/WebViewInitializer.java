@@ -6,7 +6,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.mrlu.hybrid.config.ConfigEnum;
-import com.mrlu.hybrid.config.Configurator;
+import com.mrlu.hybrid.config.MagicConfigurator;
 
 /**
  * Created by : mr.lu
@@ -16,7 +16,7 @@ import com.mrlu.hybrid.config.Configurator;
 public class WebViewInitializer {
     @SuppressLint("SetJavaScriptEnabled")
     public final static WebView createWebView(WebView webView) {
-        final boolean DEBUG = Configurator.getInstance().getConfig(ConfigEnum.DEBUG);
+        final boolean DEBUG = MagicConfigurator.getInstance().getConfig(ConfigEnum.DEBUG);
         //允许调试
         WebView.setWebContentsDebuggingEnabled(DEBUG);
 
@@ -38,7 +38,7 @@ public class WebViewInitializer {
 
         //添加UA标识
         final String ua = settings.getUserAgentString();
-        final String HYBRID_BRIDGE = Configurator.getInstance().getConfig(ConfigEnum.HYBRID_BRIDGE_NAME);
+        final String HYBRID_BRIDGE = MagicConfigurator.getInstance().getConfig(ConfigEnum.HYBRID_BRIDGE_NAME);
         settings.setUserAgentString(ua +
                 (TextUtils.isEmpty(HYBRID_BRIDGE)
                         ?

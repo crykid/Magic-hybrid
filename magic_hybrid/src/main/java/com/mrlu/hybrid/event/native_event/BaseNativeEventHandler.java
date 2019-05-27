@@ -1,12 +1,19 @@
 package com.mrlu.hybrid.event.native_event;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.mrlu.hybrid.event.web_event.WebEvent;
 import com.mrlu.hybrid.event.web_event.WebEventHandler;
+import com.mrlu.hybrid.permission.PermissionsManager;
 import com.mrlu.hybrid.proxy.BaseWebViewFragment;
+
+import java.util.List;
+
+import pub.devrel.easypermissions.EasyPermissions;
+import pub.devrel.easypermissions.AfterPermissionGranted;
 
 
 /**
@@ -22,7 +29,7 @@ import com.mrlu.hybrid.proxy.BaseWebViewFragment;
  * <p>2.在1中多次提到“职责”，很明显，不同的事件--多个功能专一处理者，“责任链模式”就很符合这种情况。我们采用链式结构
  * 将多个处理者依次存储，使用的时候逐个比对落实责任。</p>
  */
-public abstract class BaseNativeEventHandler implements IEventHandler {
+public abstract class BaseNativeEventHandler implements IEventHandler, EasyPermissions.PermissionCallbacks {
     /**
      * jsMsg 格式
      * {
@@ -124,5 +131,64 @@ public abstract class BaseNativeEventHandler implements IEventHandler {
         fragment = null;
     }
 
+    /**
+     * 检查是否有权限并主动申请权限
+     *
+     * @param requestCode
+     * @param permissions
+     * @return
+     */
+    protected boolean hasPermissions(int requestCode, String[] permissions) {
 
+        if (EasyPermissions.hasPermissions(getActivity(), permissions)) {
+            return true;
+        } else {
+            EasyPermissions.requestPermissions(getFragment(), "为了您能正常使用,请开启响应权限!", requestCode, permissions);
+            //将当前回调添加到管理器中
+            PermissionsManager.getInstance().add(requestCode, this);
+            return false;
+        }
+    }
+
+    /**
+     * EasyPermission.PermissionCallbacks
+     *
+     * @param i
+     * @param strings
+     * @param ints
+     */
+    @Override
+    public void onRequestPermissionsResult(int i, @NonNull String[] strings, @NonNull int[] ints) {
+
+    }
+
+    /**
+     * EasyPermission.PermissionCallbacks
+     * 可以看到这里我并没有做任何处理。在权限通过后有两种方式来执行后续的事情，第一重写该方法，第二使用{@link AfterPermissionGranted}
+     * 注解来注解一个权限通过后将要执行的public方法。
+     *
+     * @param requestCode
+     * @param perms
+     */
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+
+    }
+
+    /**
+     * EasyPermission.PermissionCallbacks
+     *
+     * @param requestCode
+     * @param perms
+     */
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+
+    }
+
+    protected void startActivityForResult(Intent intent, int requestCode) {
+        if (activity != null) {
+            activity.startActivityForResult(intent, requestCode);
+        }
+    }
 }

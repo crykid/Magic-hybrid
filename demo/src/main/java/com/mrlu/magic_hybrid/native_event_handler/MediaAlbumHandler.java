@@ -1,5 +1,6 @@
 package com.mrlu.magic_hybrid.native_event_handler;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -15,7 +16,6 @@ import com.mrlu.hybrid.activityresult.ActivityResultHandlerManager;
 import com.mrlu.hybrid.activityresult.IActivityResultHandler;
 import com.mrlu.hybrid.event.native_event.BaseNativeEventHandler;
 import com.mrlu.hybrid.event.web_event.WebEvent;
-import com.mrlu.hybrid.event.web_event.WebEventHandler;
 import com.mrlu.hybrid.proxy.BaseWebViewFragment;
 import com.mrlu.magic_hybrid.entity.AlbumEntity;
 import com.mrlu.magic_hybrid.web_event.MagicWebEvents;
@@ -32,6 +32,7 @@ import org.json.JSONObject;
 public class MediaAlbumHandler extends BaseNativeEventHandler implements IActivityResultHandler {
 
     private final String IMAGE_TYPE = "image/*";
+    private final String [] album_permission = {Manifest.permission.READ_EXTERNAL_STORAGE};
 
     public MediaAlbumHandler() {
         /*
@@ -90,8 +91,7 @@ public class MediaAlbumHandler extends BaseNativeEventHandler implements IActivi
             intent = new Intent(Intent.ACTION_GET_CONTENT);
         }
         intent.setType(IMAGE_TYPE);
-
-        getActivity().startActivityForResult(intent, getRequestCode());
+        startActivityForResult(intent,5371);
     }
 
     @Override
@@ -146,6 +146,5 @@ public class MediaAlbumHandler extends BaseNativeEventHandler implements IActivi
 
         passEventToWeb(webEvent);
     }
-
 
 }

@@ -4,7 +4,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.mrlu.hybrid.config.ConfigEnum;
-import com.mrlu.hybrid.config.Configurator;
+import com.mrlu.hybrid.config.MagicConfigurator;
 import com.mrlu.hybrid.event.native_event.IEventHandler;
 import com.mrlu.hybrid.proxy.BaseWebViewFragment;
 import com.orhanobut.logger.Logger;
@@ -24,7 +24,7 @@ public class WebEventHandler implements IEventHandler {
     private final Handler HANDLER;
 
     private WebEventHandler() {
-        HANDLER = Configurator.getInstance().getConfig(ConfigEnum.HANDLER);
+        HANDLER = MagicConfigurator.getInstance().getConfig(ConfigEnum.HANDLER);
     }
 
     /**

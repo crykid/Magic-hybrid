@@ -12,20 +12,20 @@ import java.util.Map;
  * Created at : 2019-05-21 at 23:23
  * Description: Hybrid配置管理，建议在app的Applicaiton或webview初始化之前添加一下配置
  */
-public class Configurator {
+public class MagicConfigurator {
 
     private final Map<ConfigEnum, Object> CONFIGS_MAP = new HashMap<>();
 
 
-    private Configurator() {
+    private MagicConfigurator() {
         CONFIGS_MAP.put(ConfigEnum.DEBUG, false);
     }
 
     private static final class Holder {
-        private final static Configurator INSTANCE = new Configurator();
+        private final static MagicConfigurator INSTANCE = new MagicConfigurator();
     }
 
-    public static Configurator getInstance() {
+    public static MagicConfigurator getInstance() {
         return Holder.INSTANCE;
     }
 
@@ -35,7 +35,7 @@ public class Configurator {
      * @param debug
      * @return
      */
-    public Configurator debug(boolean debug) {
+    public MagicConfigurator debug(boolean debug) {
         CONFIGS_MAP.put(ConfigEnum.DEBUG, debug);
         return this;
     }
@@ -46,7 +46,7 @@ public class Configurator {
      * @param handler
      * @return
      */
-    public Configurator handler(Handler handler) {
+    public MagicConfigurator handler(Handler handler) {
         CONFIGS_MAP.put(ConfigEnum.HANDLER, handler);
         return this;
     }
@@ -57,7 +57,7 @@ public class Configurator {
      * @param context
      * @return
      */
-    public Configurator context(Context context) {
+    public MagicConfigurator context(Context context) {
         CONFIGS_MAP.put(ConfigEnum.APPLICATION_CONTEXT, context);
         return this;
     }
@@ -68,7 +68,7 @@ public class Configurator {
      * @param bridge
      * @return
      */
-    public Configurator hybridBridge(@NonNull String bridge) {
+    public MagicConfigurator hybridBridge(@NonNull String bridge) {
         CONFIGS_MAP.put(ConfigEnum.APPLICATION_CONTEXT, bridge);
         return this;
     }
@@ -79,7 +79,7 @@ public class Configurator {
      * @param webHost
      * @return
      */
-    public Configurator webHost(@NonNull String webHost) {
+    public MagicConfigurator webHost(@NonNull String webHost) {
         CONFIGS_MAP.put(ConfigEnum.WEB_API_HOST, webHost);
         return this;
     }

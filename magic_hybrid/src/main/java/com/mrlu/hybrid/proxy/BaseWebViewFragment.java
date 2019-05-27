@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -15,7 +16,8 @@ import android.webkit.WebViewClient;
 import com.mrlu.hybrid.chromeclient.WebViewChromeClientIml;
 import com.mrlu.hybrid.client.WebViewClientIml;
 import com.mrlu.hybrid.config.ConfigEnum;
-import com.mrlu.hybrid.config.Configurator;
+import com.mrlu.hybrid.config.MagicConfigurator;
+import com.mrlu.hybrid.permission.PermissionsManager;
 import com.mrlu.hybrid.router.RouterKeys;
 import com.mrlu.hybrid.webview.HybridAgreementEnum;
 import com.mrlu.hybrid.webview.IWebViewInitializer;
@@ -24,6 +26,8 @@ import com.mrlu.hybrid.webview.WebViewInitializer;
 
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
+
+import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * Created by : mr.lu
@@ -61,7 +65,7 @@ public abstract class BaseWebViewFragment extends Fragment implements IWebViewIn
             mWebView.setWebViewClient(initializer.initWebViewClient());
 
             //我们自定义的协议名称
-            final String HYBRID_BRIDGE = Configurator.getInstance().getConfig(ConfigEnum.HYBRID_BRIDGE_NAME);
+            final String HYBRID_BRIDGE = MagicConfigurator.getInstance().getConfig(ConfigEnum.HYBRID_BRIDGE_NAME);
             //添加协议--如果我们没有自定义，那么就使用默认的协议名称
             mWebView.addJavascriptInterface(WebInterface.create(this), TextUtils.isEmpty(HYBRID_BRIDGE) ? HybridAgreementEnum.MAGIC_HYBRID_BRIDGE.name() : HYBRID_BRIDGE);
             webViewAvailable = true;
@@ -111,6 +115,12 @@ public abstract class BaseWebViewFragment extends Fragment implements IWebViewIn
 
     private NetworkInfo getActiveNetworkInfo() {
         return ((ConnectivityManager) getContext().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, PermissionsManager.getInstance().get(requestCode));
     }
 
     @Override

@@ -4,7 +4,7 @@ import android.app.Application;
 import android.os.Handler;
 
 import com.mrlu.hybrid.BuildConfig;
-import com.mrlu.hybrid.config.Configurator;
+import com.mrlu.hybrid.config.MagicConfigurator;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
@@ -21,8 +21,9 @@ public class MagicApplication extends Application {
     public void onCreate() {
         super.onCreate();
         initLogger();
+
         //配置Hybrid
-        Configurator.getInstance()
+        MagicConfigurator.getInstance()
                 .context(this)
                 .handler(new Handler(getMainLooper()))
                 .debug(BuildConfig.DEBUG)
