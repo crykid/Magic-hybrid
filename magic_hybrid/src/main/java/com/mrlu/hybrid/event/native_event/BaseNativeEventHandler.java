@@ -194,7 +194,7 @@ public abstract class BaseNativeEventHandler implements IEventHandler, EasyPermi
     }
 
     /**
-     * 切记：如果想要使用onActivityResult则建议使用一下方式启动activity
+     * 切记：如果想要使用onActivityResult则建议使用以下方式启动activity
      *
      * @param intent
      * @param requestCode
@@ -202,7 +202,6 @@ public abstract class BaseNativeEventHandler implements IEventHandler, EasyPermi
     protected void startActivityForResult(Intent intent, int requestCode) {
         if (activity != null) {
             activity.startActivityForResult(intent, requestCode);
-//            ActivityResultHandlerManager.getInstance().addHandler(this);
             ActivityResultHandlerManager.getInstance().add(requestCode, this);
         }
     }

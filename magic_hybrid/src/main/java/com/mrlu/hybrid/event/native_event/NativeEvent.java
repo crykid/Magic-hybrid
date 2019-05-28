@@ -35,7 +35,7 @@ import org.json.JSONObject;
 public final class NativeEvent {
 
 
-    private String requestOperationType = null;
+    private  String OPERATION_TYPE = null;
 
     private String params = null;
 
@@ -65,7 +65,7 @@ public final class NativeEvent {
                 //1.得到requestOperationType
                 final String OPERATION_TYPE = HybridAgreementEnum.OPERATION_TYPE.name();
                 if (jsMsg.contains(OPERATION_TYPE)) {
-                    requestOperationType = eventJsonObject.getString(OPERATION_TYPE);
+                    this.OPERATION_TYPE = eventJsonObject.getString(OPERATION_TYPE);
                 }
                 //2.得到params
 
@@ -89,7 +89,7 @@ public final class NativeEvent {
      * @param params               json格式的参数
      */
     public NativeEvent(@NonNull String requestOperationType, @NonNull String params) {
-        this.requestOperationType = requestOperationType;
+        this.OPERATION_TYPE = requestOperationType;
         this.params = params;
     }
 
@@ -99,7 +99,7 @@ public final class NativeEvent {
      * @return
      */
     public final String getRequestOperationType() {
-        return requestOperationType;
+        return OPERATION_TYPE;
     }
 
     /**

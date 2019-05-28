@@ -28,24 +28,6 @@ public class ActivityResultHandlerManager implements IManager<Integer, IActivity
         return Holder.INSTANCE;
     }
 
-
-//    public ActivityResultHandlerManager addHandler(IActivityResultHandler handler) {
-//        if (handler.getRequestCode() < 10) {
-//            throw new IllegalArgumentException("RequestCode should be at least double digits !");
-//        }
-//        if (RESULTHANDLER_MAP.containsKey(handler.getRequestCode())) {
-//            throw new IllegalArgumentException("RequestCode has exit ! Please reset a completely unique code !");
-//        }
-//        RESULTHANDLER_MAP.put(handler.getRequestCode(), handler);
-//        return this;
-//    }
-//
-//    private final IActivityResultHandler getHandler(Object key) {
-//        int requestCode = (int) key;
-//
-//        return RESULTHANDLER_MAP.get(requestCode);
-//    }
-
     @Override
     public IManager add(Integer requestCode, IActivityResultHandler handler) {
 
@@ -72,7 +54,6 @@ public class ActivityResultHandlerManager implements IManager<Integer, IActivity
      * @param data
      */
     public final void handleResult(int requestCode, Intent data) {
-//        final IActivityResultHandler RESULTHANDLER = getHandler(requestCode);
         final IActivityResultHandler RESULTHANDLER = get(requestCode);
         if (RESULTHANDLER != null) {
             RESULTHANDLER.handleActivityResult(data);
