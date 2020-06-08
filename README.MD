@@ -1,31 +1,70 @@
 # Magic Hybrid 魔法混合
 
-## 核心思想：我们将Web(H5/js)--Native(原生/java/android）之间的交互简单的拆分为Web to Native, Native to Web 两种：
 
->1.Web to Native：
-- 1.传递消息;
-- 2.分析消息-消息转化为事件；
-- 3.执行事件；
-
->2.Native to Web:
-- 1.产生事件；
-- 2.分析事件-事件转化为消息；
-- 3.<strong>传递</strong>消息给Web
-
-## 一.关于event
-
-1.NativeEvent，web请求netive执行的事件。我们将web主动与native通信<strong>并
-传递给Native的包含 请求native执行的事件的类型和执行该项事件必要的信息这两项内容
-</strong>抽象为一个事件-NativeEvent；NativeEvent担负一个责任，就是需要将Web传
-递给Native的数据-jsMsg,翻译成一个事件，其中必须准确的翻译出请求执行的事件的类型-OPERATION_TYPE，
-以及事件必要的参数-params(params的格式很随意，可以是我们任何已有的类型）以便在
-BaseNativeEventHandler执行的时候能够直接的拿到有效的数据；
+## 1. 两个端
+```
+1.Web：不管是JS、H5、网页前端，我们统称为Web；
+```
 
 ```
+2.Native：不管是Android、IOS、app、还是移动端，我们统称为Native。
+```
+
+--- 
+
+## 2. 两个方向 —— 一个核心
+
+我们将Web <——> Native之间的交互拆分为两个方向：**Web to Native，Native to Web**。然而不论是那种，其**核心思想都是消息的传递**，我认为都应该细分为以下几个步骤：
+
+
+- 1.产生事件：将事件类型和必要参数信息组合产生一个事件；
+- 2.转化消息：将事件转化为可以传递的消息；
+- 3.传递消息：将消息从一端传递到另一端；
+- 4.分析事件：接收端将消息转化为可以执行的事件；
+- 5.执行事件：接收端根据事件类型和必要的参数信息执行事件。
+
+
+--- 
+
+## 3. 两个方法
+
+
+可以看出来，不论是哪一端到哪一端，交互核心都是消息的传递。因此，我认为在Hybrid交互过程中，
+交互方式的重点应该是消息的传递和事件的类型，而不是方法;
+
+另一方面，Web和Native两端应该避免
+过多的耦合，以适应需求的快速变更和迭代，因此两端应该对彼此知道的越少越好，最终彼此只需要暴露一个方法供对方调用来传递消息。因此，最终只需要一个方法:
+
+- 1.String nativeExecute(String jsMsg):Native需要实现的方法，Web给Native传递消息时调用的方法；
+- 2.webExecute(String nativeMsg):Web需要实现的方法，Native给Web传递消息时调用的方法；
+
+---
+
+## 4. 两个事件
+
+
+由上述第二条可知，交互分为两部分，二者对应的事件为：
+
+
+- NativeEvent——Web to Native；
+- WebEvent——Native to Web 。
+
+```text
+接下来介绍详情：
+```
+
+
+### 4.1. NativeEvent:web请求netive执行的事件
+
+我们将web主动与native通信并传递给Native的包含 请求native执行的<strong>事件的类型和执行该项事件必要的信息</strong>这两项内容合并抽象为一个事件-NativeEvent；
+NativeEvent担负一个责任，就是需要将Web传递给Native的数据-jsMsg,翻译成一个事件，其中必须准确的翻译出请求执行的事件的类型-OPERATION_TYPE，以及事件必要的参数-params(params的格式很随意，可以是我们任何已有的类型）以便在BaseNativeEventHandler执行的时候能够直接的拿到有效的数据；
+
+```java
 public final class NativeEvent {
 
+    //事件类型
     private String OPERATION_TYPE = null;
-
+    //必要的参数信息
     private String params = null;
 
 
@@ -41,7 +80,7 @@ public final class NativeEvent {
      *  }
      */
      
-         /**
+    /**
      * 在这个构造函数中，我们将Web传递给Native消息体转化为包含操作符和关键参数字段的一个<strong>事件</strong>
      *
      * @param jsMsg Stirng:Web传递给Native消息体
@@ -111,10 +150,11 @@ public final class NativeEvent {
 
 
 
->2.WebEvent,native主动请求web执行的事件。同NativeEvent，我们将Native主动与Web通信并<strong>传递给Web的包含请求Web执行的事件的类型以及执行该事件必要的信息这两项内容
-</strong>抽象为一个事件-WebEvent；
+### 4.2. WebEvent,native主动请求web执行的事件。
+同NativeEvent，我们将Native主动与Web通信并传递给Web的包含请求Web执行的<strong>事件的类型以及执行该事件必要的信息</strong>这两项内容合并
+抽象为一个事件-WebEvent；
 
-```
+```java
 /**
  * Created by : mr.lu
  * Created at : 2019-05-24 at 10:09
@@ -153,13 +193,193 @@ public class WebEvent<T> {
 
 ```
 
-## 二.IEventHandler ,事件执行者
 
-### 1.BaseNativeEventHandler,NativeEvent 的执行者。BaseNativeEventHandler 是Native执行NativeEvent的核心，需要接触Native很多功能，所以包含以下相关功能
+
+
+## 5.  两个事件的执行者 -- IEventHandler
+
+同上述-3-，事件执行的重点应该是消息的事件的类型和必要，而不是方法;
+因此，最终只需要一个方法:
+
+```java
+public interface IEventHandler {
+
+    String execute(BaseWebViewFragment fragment, String params);
+}
+```
+### 5.1. BaseNativeEventHandler,NativeEvent 的执行者。
+
+此情此景，感觉适合用责任链模式，于是就用责任链模式吧
+
+```java
+public class NativeEventManager {
+
+    private final Map<String, BaseNativeEventHandler> EVENT_HANDLER_MAP = new HashMap<>(1);
+
+    private final String EVENT_HANDLER = "EVENT_HANDLER";
+
+    private EventManager() {
+    }
+
+    private static class Holder {
+        private static final NativeEventManager INSTANCE = new NativeEventManager();
+    }
+
+    public static NativeEventManager getInstance() {
+
+        return Holder.INSTANCE;
+    }
+
+    /**
+     * 添加Hybrid事件处理者；<br>
+     * <p>我们的EventManger是一个喜新厌旧却不贪心的管理器：可以放心的是，尽管调用当前方法的时候，我们对
+     * BaseNativeEventHandler{@link BaseNativeEventHandler}
+     * 创造新的实例并没有做限制，这意味着前后可能有多个相同EventHandler的实例会被传递过来，但是我们的内心始终
+     * 只有一个位置，尽管来来往往的handler不断，我们内心只允许一个handler停留--后来的取代早先来的。
+     * <p>
+     *
+     * @param eventHandler BaseHybridEventHandler的子类实例。
+     * @return
+     */
+    public NativeEventManager addEvent(BaseNativeEventHandler eventHandler) {
+
+        final BaseNativeEventHandler existHandler = existHandler(eventHandler);
+        //如果已有就替换
+        if (existHandler != null) {
+            replace(existHandler, eventHandler);
+        } else {
+            laterComersSurpassTheFormers(eventHandler);
+        }
+        return this;
+    }
+
+
+    /**
+     * 检查并取出与即将要添加的处理类型相同的Handler
+     *
+     * @param eventHandler 即将要添加的handler
+     * @return 与即将要添加的处理类型相同的Handler
+     */
+    private BaseNativeEventHandler existHandler(BaseNativeEventHandler eventHandler) {
+
+        BaseNativeEventHandler handler = EVENT_HANDLER_MAP.get(EVENT_HANDLER);
+        if (handler != null) {
+            while (handler.nextHandler() != null) {
+                if (handler.getHandleOperationType().equals(eventHandler.getHandleOperationType())) {
+                    return handler;
+                }
+                handler = handler.nextHandler();
+            }
+
+        }
+        return null;
+    }
+
+    /**
+     * 长江后浪推前浪--将新添加进来重复的handler替换原有的
+     *
+     * @param origin 原来的handler
+     * @param target 新的handler
+     */
+    private void replace(BaseNativeEventHandler origin, BaseNativeEventHandler target) {
+        //1.取出重复的 原来的handler的nextHandler，
+        final BaseNativeEventHandler next = origin.nextHandler();
+        //2.然后赋给当前handler的nextHandler
+        target.setNextHandler(next);
+        //3.将原来存储链中的替换掉
+        origin = target;
+    }
+
+    /**
+     * 后来居上
+     *
+     * @param eventHandler
+     */
+    private void laterComersSurpassTheFormers(BaseNativeEventHandler eventHandler) {
+        //取出上一个handler，将其设置为新的handler的nextHandler；
+        //将之前存储的handler存储到新的handler中，然后将新的handler放入map中
+        BaseNativeEventHandler beh = EVENT_HANDLER_MAP.get(EVENT_HANDLER);
+        if (beh != null) {
+            eventHandler.setNextHandler(beh);
+        }
+        EVENT_HANDLER_MAP.put(EVENT_HANDLER, eventHandler);
+
+    }
+
+    /**
+     * 获取所有的HybridEventHandler
+     *
+     * @return 所有的HybridEventHandler。
+     */
+    public final BaseNativeEventHandler getEventHandler() {
+        return EVENT_HANDLER_MAP.get(EVENT_HANDLER);
+    }
+}
+
+```
+
+
+##### BaseNativeEventHandler 是Native执行NativeEvent的核心。应包含以下功能：
+
+- 判断是否是自己执行的事件类型
+- 设置和获取下个NavtiveEventHandler
+
+```java
+
+public abstract class BaseNativeEventHandler implements IEventHandler {
+ 
+    private static final String TAG = "BaseNativeEventHandler";
+
+    private BaseNativeEventHandler nextHandler;
+
+    /**
+     * 执行事件的模板.
+     * <p>*<strong>注</strong>：在具体情况中，可能会需要进行线程的切换，请自行在具体的实现类中的execute()方法中
+     * 进行线程切换，handler已经为你准备好了</p>
+     *
+     * @param fragment Fragmetn： webView所在的fragment
+     * @param event    NativeEvent：需要执行的事件
+     * @return Stirng: native执行完事件后返回的内容，这个在不同情况下可能为空可能会有返回值
+     */
+    public final String handleEvent(BaseWebViewFragment fragment, NativeEvent event) {
+        //如果事件的类型正好是当前执行者执行的类型，那么由当前执行者执行
+        final String name = getHandleOperationType().name();
+        if (event.getRequestOperationType().equals(name)) {
+            return execute(fragment, event.getParams());
+        } else {
+            //当前处理者无法执行该事件，则交由后续处理者执行
+            if (nextHandler != null) {
+                return nextHandler.handleEvent(fragment, event);
+            } else {
+                Log.e(TAG, "handleEvent: Operation can not be execute !");
+                return null;
+            }
+        }
+    /**
+    *获取当前NativeEventHandler执行的事件类型，采用Enum的方式定义。
+    */
+    @NonNull
+    public abstract Enum getHandleOperationType();
+    }
+
+    /**
+     * 设置写一个处理者
+     *
+     * @param nextHandler 下一个处理者
+     */
+    public void setNextHandler(BaseHybridEventHandler nextHandler) {
+        this.nextHandler = nextHandler;
+    }
+    public BaseHybridEventHandler nextHandler() {
+        return nextHandler;
+    }
+``` 
+
+##### 同时，BaseNativeEventHandler 还需要接触Native很多功能，所以包含以下相关功能：
 
 - 页面跳转回传startActivityForResult-IActivityResultHandler,
 
-```
+```java
 
 public abstract class BaseNativeEventHandler implements IEventHandler,  IActivityResultHandler {
   
@@ -167,7 +387,7 @@ public abstract class BaseNativeEventHandler implements IEventHandler,  IActivit
   
   
    /**
-     * 切记：如果想要使用onActivityResult则建议使用一下方式启动activity
+     * 切记：如果想要使用onActivityResult则建议使用这种方式启动activity
      *
      * @param intent
      * @param requestCode
@@ -184,7 +404,7 @@ public abstract class BaseNativeEventHandler implements IEventHandler,  IActivit
 
 ```
 
-```
+```java
 /**
  * Created by : mr.lu
  * Created at : 2019-05-22 at 15:28
@@ -216,7 +436,7 @@ public abstract class BaseWebViewActivity extends AppCompatActivity {
 
 ```
 
-```
+```java
 /**
  * Created by : mr.lu
  * Created at : 2019-05-24 at 10:32
@@ -262,12 +482,12 @@ public class ActivityResultHandlerManager implements IManager<Integer, IActivity
 }
 ```
 
->> 可以看到，我们将requestCode--IActivityResultHandler以n对1的方式在使用的时候存储起来，在使用的时候可以根据requestCode区分
+> 可以看到，我们将requestCode--IActivityResultHandler以n对1的方式在使用的时候存储起来，在使用的时候可以根据requestCode区分
 使用哪个回调或区分回调处理那个事件；
 
 - 权限相关，requestPermissions-EasyPermissions,我们在实际情况很可能会碰到权限相关的事件，所以我封装了EasyPermissions
 
-```
+```java
 public abstract class BaseNativeEventHandler implements IEventHandler, EasyPermissions.PermissionCallbacks{
 
     /**
@@ -335,7 +555,7 @@ public abstract class BaseNativeEventHandler implements IEventHandler, EasyPermi
 
 >> 在WebView承载类fragment中
 
-```
+```java
 public abstract class BaseWebViewFragment extends Fragment implements IWebViewInitializer {
 
     //...
@@ -354,7 +574,7 @@ public abstract class BaseWebViewFragment extends Fragment implements IWebViewIn
 
 >>在PermissionsManager中
 
-```
+```java
 
 public class PermissionsManager implements IManager<Integer, EasyPermissions.PermissionCallbacks> {
 
@@ -390,7 +610,7 @@ public class PermissionsManager implements IManager<Integer, EasyPermissions.Per
 
 >> 具体类中配合EasyPermissions的注解请求权限，当然也可以重写父类的方法以requestCode来区分：
 
-```
+```java
 public class MediaCameraHandler extends BaseNativeEventHandler {
 
     private final String[] PERMISSIONS_CAMERA = {Manifest.permission.CAMERA};
@@ -439,9 +659,10 @@ public class MediaCameraHandler extends BaseNativeEventHandler {
 >>可以看到，我们的EventHandler本身并不具有其承载类权限相关的功能，我只有通过回调的方式来实现，原理很简单，相信您一看就懂
 
 
->2.WebEventHandler，WebEvent的执行者。需要特别注意的是，WebEventHandler不同于NativeEventHandler，<strong>它并不执行事件，只是将事件传递给Web！</strong>
+### 5.2. WebEventHandler，WebEvent的执行者。
+需要特别注意的是，WebEventHandler不同于NativeEventHandler，<strong>它并不执行事件，只是将事件传递给Web！</strong>
 
-```
+```java
 
 /**
  * Created by : mr.lu
@@ -496,11 +717,35 @@ public class WebEventHandler implements IEventHandler {
 
 
 
-## 三.执行事件
+## 6. 执行事件
 
->1.Web请求Native--NativeEventHandler 执行 NativeEvent,在WebInterface中:
+### 6.1. Web请求Native--NativeEventHandler 执行 NativeEvent:
+
+在适当的时机初始化NativeEventHandler：
+
+```java
+public class MainActivity extends BaseWebViewActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //将我们的eventHandler添加进来
+        NativeEventManager.getInstance()
+                .addHandler(new MediaAlbumHandler())
+                .addHandler(new MediaCameraHandler());
+
+        //本地assets目录下的
+        loadPate("magic_hybrid_page.html");
+
+    }
+}
 
 ```
+
+在WebInterface中:
+
+```java
   @JavascriptInterface
     @SuppressWarnings("unused")
     public String nativeExecute(String jsMsg) {
@@ -519,9 +764,9 @@ public class WebEventHandler implements IEventHandler {
 
 ```
 
->2.Native请求Web--WebEventHandler传递WebEvent：
+### 6.2. Native请求Web--WebEventHandler传递WebEvent：
 
-```
+```java
 public class TestHandler extends BaseNativeEventHandler {
 
 
@@ -533,6 +778,7 @@ public class TestHandler extends BaseNativeEventHandler {
        }
     private void passEventToWeb(WebEvent webEvent){
         WebEventHandler.create().execute(fragment, event);
+        //如果持有了相关引用，使用完赶紧释放
         release();
     }
     
@@ -544,12 +790,12 @@ public class TestHandler extends BaseNativeEventHandler {
         
 ```
 
-## 四.全局配置
+## 7. 全局配置
 
-### 在我们实际应用中，这个框架很可能是基于一个module来使用，所以我们的module不用一些其它方法是无法获取到主module的信息的，
+ 在我们实际应用中，这个框架很可能是基于一个module来使用，所以我们的module不用一些其它方法是无法获取到主module的信息的，
 为此我提供了以下一些基本的配置：
 
-```
+```java
 /**
  * Created by : mr.lu
  * Created at : 2019-05-21 at 23:23
@@ -644,4 +890,4 @@ public class MagicConfigurator {
 
 ```
 
->> 我建议您在Application或者WebView初始化之前调用该配置类添加具体配置。
+我建议您在Application或者WebView初始化之前调用该配置类添加具体配置。
