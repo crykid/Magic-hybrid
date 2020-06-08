@@ -2,10 +2,10 @@ package com.mrlu.hybrid.router;
 
 import android.text.TextUtils;
 import android.util.Log;
-import android.webkit.WebView;
 import android.widget.Toast;
 
 import com.mrlu.hybrid.proxy.BaseWebViewFragment;
+import com.tencent.smtt.sdk.WebView;
 
 
 /**

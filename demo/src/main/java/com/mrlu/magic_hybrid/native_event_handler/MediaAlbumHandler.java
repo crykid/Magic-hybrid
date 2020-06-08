@@ -1,6 +1,5 @@
 package com.mrlu.magic_hybrid.native_event_handler;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Intent;

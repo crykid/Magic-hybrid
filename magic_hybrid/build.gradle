@@ -38,4 +38,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     //权限
     api 'pub.devrel:easypermissions:1.2.0'
+
+    //腾讯X5浏览器-1
+    api files('libs/tx_x5_v4.3.0.1148.jar')
 }

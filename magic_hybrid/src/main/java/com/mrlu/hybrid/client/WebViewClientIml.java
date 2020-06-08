@@ -1,12 +1,12 @@
 package com.mrlu.hybrid.client;
 
-import android.webkit.WebResourceRequest;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import com.mrlu.hybrid.proxy.BaseWebViewFragment;
 import com.mrlu.hybrid.router.IRouter;
 import com.mrlu.hybrid.router.Router;
+import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 
 
 /**

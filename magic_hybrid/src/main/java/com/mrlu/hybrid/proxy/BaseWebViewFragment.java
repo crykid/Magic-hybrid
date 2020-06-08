@@ -8,9 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.webkit.WebChromeClient;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 
 import com.mrlu.hybrid.chromeclient.WebViewChromeClientIml;
@@ -23,6 +20,9 @@ import com.mrlu.hybrid.webview.HybridAgreementEnum;
 import com.mrlu.hybrid.webview.IWebViewInitializer;
 import com.mrlu.hybrid.webview.WebInterface;
 import com.mrlu.hybrid.webview.WebViewInitializer;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
@@ -32,7 +32,8 @@ import pub.devrel.easypermissions.EasyPermissions;
 /**
  * Created by : mr.lu
  * Created at : 2019-05-21 at 23:18
- * Description:
+ * Description: 将系统的webView统一为腾讯x5 webView。
+ * 因为不同的厂商不同系统之间，webView内核版本不一致，导致不同的页面在不同的手机表现不一致。所以统一为腾讯X5浏览器
  */
 public abstract class BaseWebViewFragment extends Fragment implements IWebViewInitializer {
 
@@ -58,9 +59,12 @@ public abstract class BaseWebViewFragment extends Fragment implements IWebViewIn
             mWebView.destroy();
         } else {
             IWebViewInitializer initializer = this;
+
+            //初始化webview
             final WeakReference<WebView> webViewWeakReference = new WeakReference<>(new WebView(getContext()), WEBVIEW_QUEUE);
             mWebView = webViewWeakReference.get();
             mWebView = initializer.initWebView(mWebView);
+
             mWebView.setWebChromeClient(initializer.initWebChromeClient());
             mWebView.setWebViewClient(initializer.initWebViewClient());
 

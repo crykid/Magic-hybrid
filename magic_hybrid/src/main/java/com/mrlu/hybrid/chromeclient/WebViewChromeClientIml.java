@@ -1,10 +1,10 @@
 package com.mrlu.hybrid.chromeclient;
 
-import android.webkit.JsResult;
-import android.webkit.WebChromeClient;
-import android.webkit.WebView;
 
 import com.mrlu.hybrid.proxy.BaseWebViewFragment;
+import com.tencent.smtt.export.external.interfaces.JsResult;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebView;
 
 
 /**

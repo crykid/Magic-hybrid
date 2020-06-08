@@ -9,6 +9,7 @@ import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.PrettyFormatStrategy;
+import com.tencent.smtt.sdk.QbSdk;
 
 /**
  * Created by : mr.lu
@@ -28,6 +29,10 @@ public class MagicApplication extends Application {
                 .handler(new Handler(getMainLooper()))
                 .debug(BuildConfig.DEBUG)
                 .hybridBridge("MAGIC_HYBRID_BRIDGE");
+
+        //腾讯X5浏览器-2,x5内核初始化接口
+        QbSdk.initX5Environment(getApplicationContext(), null);
+
     }
 
     private void initLogger() {

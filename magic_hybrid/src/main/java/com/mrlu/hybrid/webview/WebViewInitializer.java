@@ -2,11 +2,11 @@ package com.mrlu.hybrid.webview;
 
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
 
 import com.mrlu.hybrid.config.ConfigEnum;
 import com.mrlu.hybrid.config.MagicConfigurator;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
 
 /**
  * Created by : mr.lu
@@ -15,7 +15,7 @@ import com.mrlu.hybrid.config.MagicConfigurator;
  */
 public class WebViewInitializer {
     @SuppressLint("SetJavaScriptEnabled")
-    public final static WebView createWebView(WebView webView) {
+    public static WebView createWebView(WebView webView) {
         final boolean DEBUG = MagicConfigurator.getInstance().getConfig(ConfigEnum.DEBUG);
         //允许调试
         WebView.setWebContentsDebuggingEnabled(DEBUG);
