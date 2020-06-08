@@ -27,8 +27,8 @@ public class MediaCameraHandler extends BaseNativeEventHandler {
 
     @NonNull
     @Override
-    public String getHandleOperationType() {
-        return MagicNativeEvent.MEDIA_CAMERA.name();
+    public Enum getHandleOperationType() {
+        return MagicNativeEvent.MEDIA_CAMERA;
     }
 
     @Override

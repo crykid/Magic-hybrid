@@ -14,7 +14,7 @@ public class RequestEncryptHandler extends BaseNativeEventHandler {
 
     @NonNull
     @Override
-    public String getHandleOperationType() {
+    public Enum getHandleOperationType() {
         return null;
     }
 

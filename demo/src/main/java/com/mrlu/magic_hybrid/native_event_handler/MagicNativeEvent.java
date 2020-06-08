@@ -9,4 +9,5 @@ public enum MagicNativeEvent {
 
     MEDIA_ALBUM,
 
-    MEDIA_CAMERA,}
+    MEDIA_CAMERA,
+}

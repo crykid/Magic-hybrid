@@ -46,7 +46,7 @@ public abstract class BaseNativeEventHandler implements IEventHandler, EasyPermi
     private static final String TAG = "BaseNativeEventHandler";
     /**
      * <p>在使用的时候，我们的handler会在{@link NativeEventManager}中保存，而NativeEventManager是以<strong>单例</strong>的形式
-     * 存在的，这就可能造成<strong>内存泄漏！！</strong></p>，所以我强烈建议在execute()最后阶段，手动释放一下。
+     * 存在的，这就可能造成<strong>内存泄漏！！</strong></p>，所以我强烈建议在execute()最后阶段，调用release（）手动释放一下。
      */
     protected BaseWebViewFragment fragment;
     protected Activity activity;
@@ -64,7 +64,8 @@ public abstract class BaseNativeEventHandler implements IEventHandler, EasyPermi
      */
     public final String handleEvent(BaseWebViewFragment fragment, NativeEvent event) {
         //如果事件的类型正好是当前执行者执行的类型，那么由当前执行者执行
-        if (event.getRequestOperationType().equals(getHandleOperationType())) {
+        final String name = getHandleOperationType().name();
+        if (event.getRequestOperationType().equals(name)) {
             this.activity = fragment.getActivity();
             this.fragment = fragment;
             return execute(fragment, event.getParams());
@@ -96,7 +97,7 @@ public abstract class BaseNativeEventHandler implements IEventHandler, EasyPermi
 
 
     @NonNull
-    public abstract String getHandleOperationType();
+    public abstract Enum getHandleOperationType();
 
     /**
      * 添加链式结构的下一个事件处理者

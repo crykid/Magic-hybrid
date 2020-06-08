@@ -36,8 +36,8 @@ public class MediaAlbumHandler extends BaseNativeEventHandler {
 
     @NonNull
     @Override
-    public String getHandleOperationType() {
-        return MagicNativeEvent.MEDIA_ALBUM.name();
+    public Enum getHandleOperationType() {
+        return MagicNativeEvent.MEDIA_ALBUM;
     }
 
     @Override
@@ -58,7 +58,6 @@ public class MediaAlbumHandler extends BaseNativeEventHandler {
                     .setNegativeButton("取消", (dialog, which) -> {
                     })
                     .show();
-
 
         } catch (JSONException e) {
             e.printStackTrace();
