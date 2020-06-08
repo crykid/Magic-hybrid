@@ -4,13 +4,11 @@
 [CSDN : Magic-Hybrid][1]
 
 ## 1. 两个端 
-```
-1.Web：不管是JS、H5、网页前端，我们统称为Web；
-```
 
-```
+1.Web：不管是JS、H5、网页前端，我们统称为Web；
+
 2.Native：不管是Android、IOS、app、还是移动端，我们统称为Native。
-```
+
 
 --- 
 
