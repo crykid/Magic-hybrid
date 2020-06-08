@@ -899,6 +899,6 @@ public class MagicConfigurator {
 
 [CSDN : Magic-Hybrid][1]
 
-[] https://blog.csdn.net/blankmargin/article/details/106625803
+[1] https://blog.csdn.net/blankmargin/article/details/106625803
 
 
