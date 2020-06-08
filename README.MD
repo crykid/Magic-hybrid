@@ -1,7 +1,9 @@
 # Magic Hybrid 魔法混合
 
 
-## 1. 两个端
+[CSDN : Magic-Hybrid][1]
+
+## 1. 两个端 
 ```
 1.Web：不管是JS、H5、网页前端，我们统称为Web；
 ```
@@ -891,3 +893,12 @@ public class MagicConfigurator {
 ```
 
 我建议您在Application或者WebView初始化之前调用该配置类添加具体配置。
+
+
+---
+
+[CSDN : Magic-Hybrid][1]
+
+[] https://blog.csdn.net/blankmargin/article/details/106625803
+
+
