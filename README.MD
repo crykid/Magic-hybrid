@@ -1,12 +1,14 @@
-# Magic Hybrid 混合开发框架
+# Magic Hybrid 混合开发框架 
 
 标签： Android架构师之路
 
 ---
 
 
->[Magic-Hybrid][1]架构是从我自己写的，历时一年多的优化更改，才呈现出现在的模样，一直以来都懒得写出发，现在有时间把它发出来。
-我并没有对比市面上其它的架构，但是我猜原理都是一样的。我自认为Magic-Hybrid长处在于，Native功能、模块、业务处理简单、解耦。因为它充分利用设计模式，面向接口、单一职责、依赖倒置等原则，同时又不刻意；众多的业务功能模块彼此独立调用简单，优势展现的淋漓尽致。
+>[Magic-Hybrid][1]架构是我自己写的，历时一年多的优化更改，才呈现出现在的模样.一直以来都懒得写出来，现在有时间把它发出来。
+我并没有对比市面上其它的架构，但是我猜原理都是一样的。
+
+>我自认为Magic-Hybrid长处在于，Native功能、模块、业务处理简单、解耦。因为它面向接口,充分利用设计模式,遵循单一职责、依赖倒置等设计模式原则，同时又不刻意；众多的业务功能模块彼此独立调用简单，面对复杂交互优势展现的淋漓尽致。
 
 
 ---
@@ -15,7 +17,24 @@
 
 ## 1.初始化
 
-在Application的onCreate中调用MagicConfigurator初始化必要的参数：
+1.项目的build.gradle中
+```groovy
+    allprojects {
+            repositories {
+                //...
+                maven { url 'https://jitpack.io' }
+            }
+        }
+```
+2.在module的buidl.gradle中
+```groovy
+    dependencies {
+                implementation 'com.github.crykid:Magic-Hybrid:1.0.0'
+        }
+```
+
+
+3.在Application的onCreate中调用MagicConfigurator初始化必要的参数：
 ```java
      //配置Hybrid
         MagicConfigurator.getInstance()
@@ -25,7 +44,7 @@
                 .hybridBridge("MAGIC_HYBRID_BRIDGE");//交互协议
 ```
 
-使用继承自**BaseHybridActivity**的Activity：
+4.使用继承自**BaseHybridActivity**的Activity，或者单独使用继承自BaseHybridFragment的**WebFragmentIml**,可以搭配FragmLayout或者ViewPager：
 
 ```java
 public class MainActivity extends BaseHybridActivity {
@@ -65,7 +84,7 @@ public class MainActivity extends BaseHybridActivity {
     }
 }
 ```
-或者单独使用继承自BaseHybridFragment的**WebFragmentIml**,可以搭配FragmLayout或者ViewPager。
+
 
 ## 2. 执行事件
 
