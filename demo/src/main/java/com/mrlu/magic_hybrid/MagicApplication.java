@@ -25,10 +25,10 @@ public class MagicApplication extends Application {
 
         //配置Hybrid
         MagicConfigurator.getInstance()
-                .context(this)
+                .context(this)//ApplicationContext
                 .handler(new Handler(getMainLooper()))
-                .debug(BuildConfig.DEBUG)
-                .hybridBridge("MAGIC_HYBRID_BRIDGE");
+                .debug(BuildConfig.DEBUG)//是否debug
+                .hybridBridge("MAGIC_HYBRID_BRIDGE");//交互协议
 
         //腾讯X5浏览器-2,x5内核初始化接口
         QbSdk.initX5Environment(getApplicationContext(), null);

@@ -1,7 +1,129 @@
-# Magic Hybrid 魔法混合
+# Magic Hybrid 混合开发框架
+
+标签： Android架构师之路
+
+---
 
 
-[CSDN : Magic-Hybrid][1]
+>[Magic-Hybrid][1]架构是从我自己写的，历时一年多的优化更改，才呈现出现在的模样，一直以来都懒得写出发，现在有时间把它发出来。
+我并没有对比市面上其它的架构，但是我猜原理都是一样的。我自认为Magic-Hybrid长处在于，Native功能、模块、业务处理简单、解耦。因为它充分利用设计模式，面向接口、单一职责、依赖倒置等原则，同时又不刻意；众多的业务功能模块彼此独立调用简单，优势展现的淋漓尽致。
+
+
+---
+
+# 用法
+
+## 1.初始化
+
+在Application的onCreate中调用MagicConfigurator初始化必要的参数：
+```java
+     //配置Hybrid
+        MagicConfigurator.getInstance()
+                .context(this)//ApplicationContext
+                .handler(new Handler(getMainLooper()))
+                .debug(BuildConfig.DEBUG)//是否debug
+                .hybridBridge("MAGIC_HYBRID_BRIDGE");//交互协议
+```
+
+使用继承自**BaseHybridActivity**的Activity：
+
+```java
+public class MainActivity extends BaseHybridActivity {
+
+    private final static String INTENT_TARGET_URL = "intent_target_url";
+
+    /**
+     * 跳转方法
+     *
+     * @param context
+     * @param url
+     */
+    public static void start(Context context, String url) {
+        context.startActivity(new Intent(context, MainActivity.class)
+                .putExtra(INTENT_TARGET_URL, url));
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //将我们的eventHandler添加进来
+        NativeEventManager.getInstance()
+                .addHandler(new MediaAlbumHandler())
+                .addHandler(new MediaCameraHandler());
+
+        //从别的页面跳转过来
+//        Intent intent = getIntent();
+//        String intent_url = intent.getStringExtra(INTENT_TARGET_URL);
+//        loadPate(intent_url);
+
+        //本地assets目录下的
+        loadPate("magic_hybrid_page.html");
+        //网页
+//        loadPate("https://www.baidu.com");
+
+    }
+}
+```
+或者单独使用继承自BaseHybridFragment的**WebFragmentIml**,可以搭配FragmLayout或者ViewPager。
+
+## 2. 执行事件
+
+### 2.1. Web请求Native--NativeEventHandler 执行 NativeEvent:
+
+在适当的时机初始化NativeEventHandler之后，还需要在WebInterface中:
+
+```java
+  @JavascriptInterface
+    @SuppressWarnings("unused")
+    public String nativeExecute(String jsMsg) {
+
+        // TODO: 2019-05-24 注意这里可能有线程切换的问题 ，如果有需要，后续可以在具体handler中自己切换线程
+        
+        //1.获取NativeEventHandler；
+        final BaseNativeEventHandler eventHandler = NativeEventManager.getInstance().getEventHandler();
+        //2.将jsMsg包装秤一个NativeEvent；
+        final NativeEvent nativeEvent = new NativeEvent(jsMsg);
+        Log.d(TAG, "nativeExecute: >>> OPERATION_TYPE >>> : " + nativeEvent.getRequestOperationType());
+        Logger.json(jsMsg);
+        //3.执行该事件。
+        return eventHandler.handleEvent(FRAGMENT, nativeEvent);
+    }
+
+```
+
+### 2.2 Native请求Web--WebEventHandler传递WebEvent：
+
+```java
+public class TestHandler extends BaseNativeEventHandler {
+
+
+    private void anyMethod(){
+        AlbumEntity albumEntity = new AlbumEntity(path, path, path);
+        WebEvent<AlbumEntity> webEvent = new WebEvent<>(MagicWebEvents.MEDIA_IMAGE, albumEntity);
+
+        passEventToWeb(webEvent);
+       }
+    private void passEventToWeb(WebEvent webEvent){
+        WebEventHandler.create().execute(fragment, event);
+        //如果持有了相关引用，使用完赶紧释放
+        release();
+    }
+    
+    private void release(){
+    
+        activity = null;
+        fragment = null;
+    }
+        
+```
+
+---
+
+#原理分析
+
+---
+
 
 ## 1. 两个端 
 
@@ -717,80 +839,9 @@ public class WebEventHandler implements IEventHandler {
 
 
 
-## 6. 执行事件
-
-### 6.1. Web请求Native--NativeEventHandler 执行 NativeEvent:
-
-在适当的时机初始化NativeEventHandler：
-
-```java
-public class MainActivity extends BaseWebViewActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        //将我们的eventHandler添加进来
-        NativeEventManager.getInstance()
-                .addHandler(new MediaAlbumHandler())
-                .addHandler(new MediaCameraHandler());
-
-        //本地assets目录下的
-        loadPate("magic_hybrid_page.html");
-
-    }
-}
-
-```
-
-在WebInterface中:
-
-```java
-  @JavascriptInterface
-    @SuppressWarnings("unused")
-    public String nativeExecute(String jsMsg) {
-
-        // TODO: 2019-05-24 注意这里可能有线程切换的问题 ，如果有需要，后续可以在具体handler中自己切换线程
-        
-        //1.获取NativeEventHandler；
-        final BaseNativeEventHandler eventHandler = NativeEventManager.getInstance().getEventHandler();
-        //2.将jsMsg包装秤一个NativeEvent；
-        final NativeEvent nativeEvent = new NativeEvent(jsMsg);
-        Log.d(TAG, "nativeExecute: >>> OPERATION_TYPE >>> : " + nativeEvent.getRequestOperationType());
-        Logger.json(jsMsg);
-        //3.执行该事件。
-        return eventHandler.handleEvent(FRAGMENT, nativeEvent);
-    }
-
-```
-
-### 6.2. Native请求Web--WebEventHandler传递WebEvent：
-
-```java
-public class TestHandler extends BaseNativeEventHandler {
 
 
-    private void anyMethod(){
-        AlbumEntity albumEntity = new AlbumEntity(path, path, path);
-        WebEvent<AlbumEntity> webEvent = new WebEvent<>(MagicWebEvents.MEDIA_IMAGE, albumEntity);
-
-        passEventToWeb(webEvent);
-       }
-    private void passEventToWeb(WebEvent webEvent){
-        WebEventHandler.create().execute(fragment, event);
-        //如果持有了相关引用，使用完赶紧释放
-        release();
-    }
-    
-    private void release(){
-    
-        activity = null;
-        fragment = null;
-    }
-        
-```
-
-## 7. 全局配置
+## 6. 全局配置
 
  在我们实际应用中，这个框架很可能是基于一个module来使用，所以我们的module不用一些其它方法是无法获取到主module的信息的，
 为此我提供了以下一些基本的配置：
@@ -898,5 +949,8 @@ public class MagicConfigurator {
 [CSDN : Magic-Hybrid][1]
 
 [1]:https://blog.csdn.net/blankmargin/article/details/106625803
+
+
+
 
 

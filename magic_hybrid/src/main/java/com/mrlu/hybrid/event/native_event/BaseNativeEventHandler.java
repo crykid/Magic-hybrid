@@ -10,7 +10,7 @@ import com.mrlu.hybrid.activityresult.IActivityResultHandler;
 import com.mrlu.hybrid.event.web_event.WebEvent;
 import com.mrlu.hybrid.event.web_event.WebEventHandler;
 import com.mrlu.hybrid.permission.PermissionsManager;
-import com.mrlu.hybrid.proxy.BaseWebViewFragment;
+import com.mrlu.hybrid.proxy.BaseHybridFragment;
 
 import java.util.List;
 
@@ -48,7 +48,7 @@ public abstract class BaseNativeEventHandler implements IEventHandler, EasyPermi
      * <p>在使用的时候，我们的handler会在{@link NativeEventManager}中保存，而NativeEventManager是以<strong>单例</strong>的形式
      * 存在的，这就可能造成<strong>内存泄漏！！</strong></p>，所以我强烈建议在execute()最后阶段，调用release（）手动释放一下。
      */
-    protected BaseWebViewFragment fragment;
+    protected BaseHybridFragment fragment;
     protected Activity activity;
 
     private BaseNativeEventHandler nextHandler;
@@ -62,7 +62,7 @@ public abstract class BaseNativeEventHandler implements IEventHandler, EasyPermi
      * @param event    NativeEvent：需要执行的事件
      * @return Stirng: native执行完事件后返回的内容，这个在不同情况下可能为空可能会有返回值
      */
-    public final String handleEvent(BaseWebViewFragment fragment, NativeEvent event) {
+    public final String handleEvent(BaseHybridFragment fragment, NativeEvent event) {
         //如果事件的类型正好是当前执行者执行的类型，那么由当前执行者执行
         final String name = getHandleOperationType().name();
         if (event.getRequestOperationType().equals(name)) {
@@ -118,7 +118,7 @@ public abstract class BaseNativeEventHandler implements IEventHandler, EasyPermi
     }
 
 
-    public BaseWebViewFragment getFragment() {
+    public BaseHybridFragment getFragment() {
         return fragment;
     }
 

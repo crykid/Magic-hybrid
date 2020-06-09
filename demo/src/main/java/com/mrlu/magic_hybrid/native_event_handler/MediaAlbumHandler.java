@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.mrlu.hybrid.event.native_event.BaseNativeEventHandler;
 import com.mrlu.hybrid.event.web_event.WebEvent;
-import com.mrlu.hybrid.proxy.BaseWebViewFragment;
+import com.mrlu.hybrid.proxy.BaseHybridFragment;
 import com.mrlu.magic_hybrid.entity.AlbumEntity;
 import com.mrlu.magic_hybrid.web_event.MagicWebEvents;
 
@@ -41,7 +41,7 @@ public class MediaAlbumHandler extends BaseNativeEventHandler {
     }
 
     @Override
-    public String execute(BaseWebViewFragment fragment, String params) {
+    public String execute(BaseHybridFragment fragment, String params) {
 
         try {
             JSONObject paramsJson = new JSONObject(params);

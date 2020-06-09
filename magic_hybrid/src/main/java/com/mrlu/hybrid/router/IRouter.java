@@ -1,7 +1,7 @@
 package com.mrlu.hybrid.router;
 
 
-import com.mrlu.hybrid.proxy.BaseWebViewFragment;
+import com.mrlu.hybrid.proxy.BaseHybridFragment;
 
 /**
  * Created by : mr.lu
@@ -10,5 +10,5 @@ import com.mrlu.hybrid.proxy.BaseWebViewFragment;
  */
 public interface IRouter {
 
-    boolean handleHrefUrl(BaseWebViewFragment fragment, String url);
+    boolean handleHrefUrl(BaseHybridFragment fragment, String url);
 }

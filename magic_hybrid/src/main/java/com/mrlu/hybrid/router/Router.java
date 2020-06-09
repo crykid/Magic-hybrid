@@ -4,7 +4,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.mrlu.hybrid.proxy.BaseWebViewFragment;
+import com.mrlu.hybrid.proxy.BaseHybridFragment;
 import com.tencent.smtt.sdk.WebView;
 
 
@@ -29,7 +29,7 @@ public class Router implements IRouter {
     }
 
     @Override
-    public boolean handleHrefUrl(BaseWebViewFragment fragment, String url) {
+    public boolean handleHrefUrl(BaseHybridFragment fragment, String url) {
 
         if (url.contains("google")) {
             Toast.makeText(fragment.getContext(),"在中国大陆无法访问google",Toast.LENGTH_SHORT).show();
@@ -41,7 +41,7 @@ public class Router implements IRouter {
         return false;
     }
 
-    public void loadPage(BaseWebViewFragment fragment, String url) {
+    public void loadPage(BaseHybridFragment fragment, String url) {
         if (fragment != null && fragment.getWebView() != null) {
             loadPage(fragment.getWebView(), url);
         }

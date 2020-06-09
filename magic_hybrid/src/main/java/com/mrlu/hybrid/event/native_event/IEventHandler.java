@@ -1,7 +1,7 @@
 package com.mrlu.hybrid.event.native_event;
 
 
-import com.mrlu.hybrid.proxy.BaseWebViewFragment;
+import com.mrlu.hybrid.proxy.BaseHybridFragment;
 
 /**
  * Created by : mr.lu
@@ -10,5 +10,5 @@ import com.mrlu.hybrid.proxy.BaseWebViewFragment;
  */
 public interface IEventHandler {
 
-    String execute(BaseWebViewFragment fragment, String params);
+    String execute(BaseHybridFragment fragment, String params);
 }

@@ -35,7 +35,7 @@ import pub.devrel.easypermissions.EasyPermissions;
  * Description: 将系统的webView统一为腾讯x5 webView。
  * 因为不同的厂商不同系统之间，webView内核版本不一致，导致不同的页面在不同的手机表现不一致。所以统一为腾讯X5浏览器
  */
-public abstract class BaseWebViewFragment extends Fragment implements IWebViewInitializer {
+public abstract class BaseHybridFragment extends Fragment implements IWebViewInitializer {
 
     private String mUrl = null;
     private boolean lazyLoad = false;
@@ -71,7 +71,11 @@ public abstract class BaseWebViewFragment extends Fragment implements IWebViewIn
             //我们自定义的协议名称
             final String HYBRID_BRIDGE = MagicConfigurator.getInstance().getConfig(ConfigEnum.HYBRID_BRIDGE_NAME);
             //添加协议--如果我们没有自定义，那么就使用默认的协议名称
-            mWebView.addJavascriptInterface(WebInterface.create(this), TextUtils.isEmpty(HYBRID_BRIDGE) ? HybridAgreementEnum.MAGIC_HYBRID_BRIDGE.name() : HYBRID_BRIDGE);
+            mWebView.addJavascriptInterface(WebInterface.create(this),
+                    TextUtils.isEmpty(HYBRID_BRIDGE)
+                            ? HybridAgreementEnum.MAGIC_HYBRID_BRIDGE.name()
+                            : HYBRID_BRIDGE);
+
             webViewAvailable = true;
         }
     }

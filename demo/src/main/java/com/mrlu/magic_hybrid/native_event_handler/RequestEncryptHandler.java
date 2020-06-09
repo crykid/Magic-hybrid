@@ -3,7 +3,7 @@ package com.mrlu.magic_hybrid.native_event_handler;
 import android.support.annotation.NonNull;
 
 import com.mrlu.hybrid.event.native_event.BaseNativeEventHandler;
-import com.mrlu.hybrid.proxy.BaseWebViewFragment;
+import com.mrlu.hybrid.proxy.BaseHybridFragment;
 
 /**
  * Created by : mr.lu
@@ -19,7 +19,7 @@ public class RequestEncryptHandler extends BaseNativeEventHandler {
     }
 
     @Override
-    public String execute(BaseWebViewFragment fragment, String params) {
+    public String execute(BaseHybridFragment fragment, String params) {
         return null;
     }
 }

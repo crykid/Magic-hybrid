@@ -17,7 +17,7 @@ import com.mrlu.hybrid.router.RouterKeys;
  * Created at : 2019-05-21 at 23:18
  * Description:
  */
-public class WebFragmentIml extends BaseWebViewFragment {
+public class WebFragmentIml extends BaseHybridFragment {
 
     private boolean initialized = false;
 

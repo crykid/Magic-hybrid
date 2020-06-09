@@ -6,7 +6,7 @@ import android.util.Log;
 import com.mrlu.hybrid.config.ConfigEnum;
 import com.mrlu.hybrid.config.MagicConfigurator;
 import com.mrlu.hybrid.event.native_event.IEventHandler;
-import com.mrlu.hybrid.proxy.BaseWebViewFragment;
+import com.mrlu.hybrid.proxy.BaseHybridFragment;
 import com.orhanobut.logger.Logger;
 import com.mrlu.hybrid.event.native_event.BaseNativeEventHandler;
 
@@ -40,7 +40,7 @@ public class WebEventHandler implements IEventHandler {
         return webEventHandler;
     }
 
-    public String execute(BaseWebViewFragment fragment,WebEvent event){
+    public String execute(BaseHybridFragment fragment, WebEvent event){
 
         Log.d(TAG, "execute: <<< OPERATION_TYPE <<< : "+event.getOperationType());
         return execute(fragment, event.toString());
@@ -48,7 +48,7 @@ public class WebEventHandler implements IEventHandler {
 
 
     @Override
-    public String execute(BaseWebViewFragment fragment, String params) {
+    public String execute(BaseHybridFragment fragment, String params) {
         HANDLER.post(() -> {
             Logger.json(params);
             fragment.getWebView().loadUrl("javascript:webExecute(" + params + ")");

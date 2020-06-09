@@ -15,9 +15,9 @@ import com.mrlu.hybrid.activityresult.IActivityResultHandler;
 /**
  * Created by : mr.lu
  * Created at : 2019-05-22 at 15:28
- * Description:webView承载activity
+ * Description: webView承载activity
  */
-public abstract class BaseWebViewActivity extends AppCompatActivity {
+public abstract class BaseHybridActivity extends AppCompatActivity {
 
 
     @Override
@@ -25,9 +25,12 @@ public abstract class BaseWebViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base_webview);
 
-
     }
 
+    /**
+     * 主动跳转的方法
+     * @param url
+     */
     protected void loadPate(String url) {
         final WebFragmentIml fragment = WebFragmentIml.create(url);
         FragmentManager fragmentManager = getSupportFragmentManager();

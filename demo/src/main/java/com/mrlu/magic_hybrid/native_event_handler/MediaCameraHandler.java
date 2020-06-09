@@ -7,7 +7,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 
 import com.mrlu.hybrid.event.native_event.BaseNativeEventHandler;
-import com.mrlu.hybrid.proxy.BaseWebViewFragment;
+import com.mrlu.hybrid.proxy.BaseHybridFragment;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 
@@ -32,7 +32,7 @@ public class MediaCameraHandler extends BaseNativeEventHandler {
     }
 
     @Override
-    public String execute(BaseWebViewFragment fragment, String params) {
+    public String execute(BaseHybridFragment fragment, String params) {
         new AlertDialog.Builder(fragment.getContext())
                 .setTitle("web调用native")
                 .setMessage("web调用native的相机，确定打开相机吗")

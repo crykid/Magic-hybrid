@@ -1,7 +1,7 @@
 package com.mrlu.hybrid.client;
 
 
-import com.mrlu.hybrid.proxy.BaseWebViewFragment;
+import com.mrlu.hybrid.proxy.BaseHybridFragment;
 import com.mrlu.hybrid.router.IRouter;
 import com.mrlu.hybrid.router.Router;
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
@@ -16,10 +16,10 @@ import com.tencent.smtt.sdk.WebViewClient;
  */
 public class WebViewClientIml extends WebViewClient {
 
-    private BaseWebViewFragment fragment;
+    private BaseHybridFragment fragment;
     private final IRouter ROUTER;
 
-    public WebViewClientIml(BaseWebViewFragment fragment) {
+    public WebViewClientIml(BaseHybridFragment fragment) {
         ROUTER = Router.getInstance();
         this.fragment = fragment;
     }

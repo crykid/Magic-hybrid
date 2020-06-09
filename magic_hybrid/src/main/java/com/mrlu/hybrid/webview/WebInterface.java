@@ -6,7 +6,7 @@ import android.webkit.JavascriptInterface;
 import com.mrlu.hybrid.event.native_event.BaseNativeEventHandler;
 import com.mrlu.hybrid.event.native_event.NativeEventManager;
 import com.mrlu.hybrid.event.native_event.NativeEvent;
-import com.mrlu.hybrid.proxy.BaseWebViewFragment;
+import com.mrlu.hybrid.proxy.BaseHybridFragment;
 import com.orhanobut.logger.Logger;
 
 
@@ -18,13 +18,13 @@ import com.orhanobut.logger.Logger;
 public class WebInterface {
 
     private static final String TAG = "WebInterface";
-    private final BaseWebViewFragment FRAGMENT;
+    private final BaseHybridFragment FRAGMENT;
 
-    private WebInterface(BaseWebViewFragment fragment) {
+    private WebInterface(BaseHybridFragment fragment) {
         this.FRAGMENT = fragment;
     }
 
-    public static WebInterface create(BaseWebViewFragment fragment) {
+    public static WebInterface create(BaseHybridFragment fragment) {
         return new WebInterface(fragment);
     }
 

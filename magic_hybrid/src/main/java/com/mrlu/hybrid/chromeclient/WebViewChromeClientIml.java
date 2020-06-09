@@ -1,7 +1,7 @@
 package com.mrlu.hybrid.chromeclient;
 
 
-import com.mrlu.hybrid.proxy.BaseWebViewFragment;
+import com.mrlu.hybrid.proxy.BaseHybridFragment;
 import com.tencent.smtt.export.external.interfaces.JsResult;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebView;
@@ -14,9 +14,9 @@ import com.tencent.smtt.sdk.WebView;
  */
 public class WebViewChromeClientIml extends WebChromeClient {
 
-    private BaseWebViewFragment fragment;
+    private BaseHybridFragment fragment;
 
-    public WebViewChromeClientIml(BaseWebViewFragment fragment) {
+    public WebViewChromeClientIml(BaseHybridFragment fragment) {
         this.fragment = fragment;
     }
 
